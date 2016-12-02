@@ -4,8 +4,21 @@
 (function (module) {
   'use strict';
 
-  function StatesService(httpService, i18nService) {
+  function StatesService($q, httpService, i18nService) {
     var service = this;
+
+    service.search = function(query) {
+      console.log(query);
+      return $q.resolve([
+        { title: 'Retour vers le futur 5', id: 1 },
+        { title: 'JPP', id: 2 },
+        { title: 'JPP 2', id: 3 }
+      ]);
+    };
+
+    service.getMovie = function(idMovie) {
+      return $q.resolve({ title: 'JPP', id: idMovie });
+    }
 
     /**
      * Resolve states data.
@@ -20,6 +33,7 @@
   }
 
   module.service('statesService', [
+    '$q',
     'httpService',
     'i18nService',
     StatesService

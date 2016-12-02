@@ -1,5 +1,32 @@
-ion-view.view-home(
-  view-title="{{ 'STATES.HOME.TITLE' | translate }}",
-  translate-namespace="STATES.HOME")
-  ion-content
-    ng-include(src="'modules/app.states.home/smartphone/content.home.html'")
+ion-view.view-home(view-title="HOME")
+  ion-header.bar-subheader.item-input-inset
+    label.item-input-wrapper
+      i.icon.ion-ios-search.placeholder-icon
+      input(
+        type='search',
+        ng-model='search.query',
+        placeholder="Rechercher")
+    button.button.button-clear(
+      ng-disabled="search.query.length < 3",
+      on-tap="homeController.search()",
+      style={color: 'darkgrey'}) Ok
+  ion-content.has-subheader
+    h1 Bonjour
+      i.icon.ion-transgender
+    ion-list
+      ion-item(nb-if="!search.result.length")
+        | Pas de résultats
+      ion-item(
+        ng-repeat="result in search.results",
+        ui-state="STATE_DETAILS",
+        ui-state-params="{ id: result.id }").item-icon-right
+        | {{ result.title }}
+        i.icon.ion-ios-arrow-right
+    div.bar.bar-footer.bar-light
+      div.row(style="color: grey;")
+        div.col
+          | proudly powered by
+          i.icon.ion-social-github
+        div.col(style="text-align: right; color: grey;")
+          | coded on
+          i.icon.ion-social-tux
