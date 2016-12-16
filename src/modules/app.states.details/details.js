@@ -7,7 +7,7 @@
   var STATE_DETAILS = 'states.details';
 
   function movieDataResolver($stateParams, statesService) {
-    return stateService.getMovie($stateParams.id);
+    return statesService.getMovie($stateParams.id);
   }
 
   function config($stateProvider) {

@@ -4,21 +4,52 @@
 (function (module) {
   'use strict';
 
-  function StatesService($q, httpService, i18nService) {
+  function StatesService(
+    $q,
+    httpService,
+    i18nService,
+    API_IMAGES_URL,
+    API_KEY
+  ) {
     var service = this;
 
-    service.search = function(query) {
+    service.searchMovie = function (query) {
+      return httpService.get('/3/search/movie', {
+        language: i18nService.getLocale(),
+        api_key: API_KEY,
+        query: query
+      }).then(function (data) {
+        return data.results;
+      });
+
+      /*
       console.log(query);
       return $q.resolve([
         { title: 'Retour vers le futur 5', id: 1 },
         { title: 'JPP', id: 2 },
         { title: 'JPP 2', id: 3 }
       ]);
+      */
     };
 
-    service.getMovie = function(idMovie) {
-      return $q.resolve({ title: 'JPP', id: idMovie });
-    }
+    service.getMovie = function (idMovie) {
+      return httpService.get('/3/movie/' + idMovie, {
+        language: i18nService.getLocale(),
+        api_key: API_KEY
+      });
+    };
+
+    service.discoverMovie = function () {
+      return httpService.get('/3/discover/movie', {
+        'release_date.lte': moment().add(12, 'months').format('YYYY-MM-DD'),
+        'release_date.gte': moment().format('YYYY-MM-DD'),
+        with_genres: '878',
+        language: i18nService.getLocale(),
+        api_key: API_KEY
+      }).then(function (data) {
+        return _.sample(data.results) || $q.reject();
+      });
+    };
 
     /**
      * Resolve states data.
@@ -36,6 +67,8 @@
     '$q',
     'httpService',
     'i18nService',
+    'API_IMAGES_URL',
+    'API_KEY',
     StatesService
   ]);
 
